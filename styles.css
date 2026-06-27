@@ -160,6 +160,7 @@ div.section-kicker { display: flex; align-items: center; gap: 8px; color: #76807
 
 .wish-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .wish-grid.compact { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#wishlist-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .wish-card { position: relative; min-width: 0; padding: 20px; border-radius: 18px; background: var(--surface); }
 .wish-image { height: 158px; margin: -20px -20px 18px; overflow: hidden; border-radius: 18px 18px 10px 10px; background: var(--surface-soft); }
 .wish-image img { width: 100%; height: 100%; display: block; object-fit: cover; }
@@ -171,8 +172,8 @@ div.section-kicker { display: flex; align-items: center; gap: 8px; color: #76807
 .more-button svg { width: 18px; }
 .card-menu { position: absolute; top: 34px; right: 0; z-index: 6; width: 135px; padding: 5px; display: none; border: 1px solid var(--line); border-radius: 12px; background: white; box-shadow: 0 12px 28px rgba(50, 55, 52, .14); }
 .card-menu.open { display: grid; }
-.card-menu button { height: 34px; padding: 0 9px; display: flex; align-items: center; gap: 8px; border: 0; border-radius: 8px; background: white; font-size: 10px; text-align: left; cursor: pointer; }
-.card-menu button:hover { background: #f4f0ea; }
+.card-menu button, .card-menu a { height: 34px; padding: 0 9px; display: flex; align-items: center; gap: 8px; border: 0; border-radius: 8px; color: var(--ink); background: white; font-size: 10px; text-align: left; text-decoration: none; cursor: pointer; }
+.card-menu button:hover, .card-menu a:hover { background: #f4f0ea; }
 .card-menu button.danger { color: #a25348; }
 .card-menu svg { width: 14px; }
 .wish-title { margin: 15px 0 7px; overflow: hidden; font: 600 14px/1.55 'Noto Sans JP', sans-serif; text-overflow: ellipsis; white-space: nowrap; }
@@ -189,6 +190,20 @@ div.section-kicker { display: flex; align-items: center; gap: 8px; color: #76807
 .purchase-button { min-height: 36px; padding: 0 10px; border: 0; border-radius: 10px; color: #9a5d48; background: var(--peach-soft); font: 700 10px 'Noto Sans JP', sans-serif; cursor: pointer; }
 .purchase-button:hover { background: #e9c8b7; }
 .wish-note { min-height: 32px; margin: 11px 0 0; color: #858b87; font: 400 9px/1.65 'Noto Sans JP', sans-serif; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.wish-card-compact { --compact-pad: 13px; aspect-ratio: 1 / 1; padding: var(--compact-pad); display: flex; flex-direction: column; border-radius: 16px; box-shadow: 0 7px 20px rgba(55, 64, 59, .06); }
+.wish-card-compact .wish-image { height: 44%; flex: 0 0 44%; margin: calc(var(--compact-pad) * -1) calc(var(--compact-pad) * -1) 8px; border-radius: 16px 16px 9px 9px; }
+.wish-card-compact.has-image .wish-card-top { position: absolute; inset: 8px 8px auto; z-index: 3; }
+.wish-card-compact .category-mark { width: 30px; height: 30px; border-radius: 10px; font-size: 10px; }
+.wish-card-compact.has-image .category-mark { box-shadow: 0 3px 10px rgba(45, 50, 47, .14); }
+.wish-card-compact .more-button { width: 29px; height: 29px; }
+.wish-card-compact.has-image .more-button { background: rgba(255, 253, 249, .92); box-shadow: 0 3px 10px rgba(45, 50, 47, .12); }
+.wish-card-compact .card-menu { top: 31px; width: 145px; }
+.wish-card-compact .wish-title { margin: 9px 0 3px; display: -webkit-box; overflow: hidden; font-size: 11px; line-height: 1.45; white-space: normal; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.wish-card-compact.has-image .wish-title { margin-top: 1px; }
+.wish-card-compact .wish-price { font-size: 17px; }
+.wish-card-compact .tag-row { min-height: 17px; margin: 6px 0 0; flex-wrap: nowrap; gap: 4px; overflow: hidden; }
+.wish-card-compact .tag { max-width: 55%; padding: 3px 5px; overflow: hidden; font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
+.wish-card-compact .wish-meta, .wish-card-compact .wish-note, .wish-card-compact .wish-actions { display: none; }
 
 .task-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
 .task-group { padding: 23px; border: 1px solid rgba(75, 82, 78, .055); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
@@ -302,6 +317,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--sage); box-shado
   .main-content { padding-inline: 26px; }
   .hero-row { grid-template-columns: 1.35fr .9fr; }
   .wish-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #wishlist-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .hero-decoration { opacity: .65; }
 }
 
@@ -312,6 +328,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--sage); box-shado
   .mobile-only { display: grid !important; }
   .avatar { width: 36px; height: 36px; }
   .hero-row { grid-template-columns: 1fr; }
+  #wishlist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .welcome-card { min-height: 205px; padding: 27px; }
   .welcome-card h2 { margin-top: 19px; }
   .budget-card { padding: 24px; }
@@ -347,6 +364,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--sage); box-shado
   .panel-heading.outside .primary-button { width: 43px; padding: 0; font-size: 0; }
   .wish-grid, .wish-grid.compact { grid-template-columns: 1fr; }
   .wish-card { padding: 19px; }
+  #wishlist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  #wishlist-grid .wish-card { --compact-pad: 11px; padding: var(--compact-pad); }
+  #wishlist-grid .wish-card-compact .wish-image { margin: calc(var(--compact-pad) * -1) calc(var(--compact-pad) * -1) 7px; }
+  #wishlist-grid .wish-card-compact .wish-title { margin-top: 6px; font-size: 10px; }
+  #wishlist-grid .wish-card-compact.has-image .wish-title { margin-top: 0; }
+  #wishlist-grid .wish-card-compact .wish-price { font-size: 15px; }
   .page-toolbar { align-items: flex-end; }
   .page-toolbar .primary-button { width: 43px; flex: 0 0 auto; padding: 0; font-size: 0; }
   .summary-strip { gap: 10px; justify-content: space-between; }

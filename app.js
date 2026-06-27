@@ -247,22 +247,24 @@ function renderHome() {
 
   const nextWishes = [...wishes].sort((a, b) => PRIORITIES.indexOf(a.priority) - PRIORITIES.indexOf(b.priority)).slice(0, 3);
   document.querySelector('#home-wish-list').innerHTML = nextWishes.length
-    ? nextWishes.map(renderWishCard).join('')
+    ? nextWishes.map(item => renderWishCard(item)).join('')
     : emptyState('heart', '欲しいものはまだありません', '思いついたときに、そっと追加しましょう');
 }
 
-function renderWishCard(item) {
+function renderWishCard(item, compact = false) {
   const [bg, ink, letter] = categoryVisual(item.category);
   const link = safeLink(item.link);
   const image = safeImage(item.image);
   return `
-    <article class="wish-card ${image ? 'has-image' : ''}" style="--category-bg:${bg};--category-ink:${ink}">
+    <article class="wish-card ${image ? 'has-image' : ''} ${compact ? 'wish-card-compact' : ''}" style="--category-bg:${bg};--category-ink:${ink}">
       ${image ? `<div class="wish-image"><img src="${escapeHTML(image)}" alt="${escapeHTML(item.name)}" /></div>` : ''}
       <div class="wish-card-top">
         <span class="category-mark" aria-label="${escapeHTML(item.category)}">${letter}</span>
         <div class="more-wrap">
           <button class="more-button" data-menu-for="${item.id}" aria-label="${escapeHTML(item.name)}のメニュー" title="メニュー"><svg><use href="#i-more"></use></svg></button>
-          <div class="card-menu" id="menu-${item.id}">
+          <div class="card-menu">
+            ${compact ? `<button data-purchase="${item.id}"><svg><use href="#i-bag"></use></svg>購入済みにする</button>` : ''}
+            ${compact && link ? `<a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer"><svg><use href="#i-link"></use></svg>商品ページ</a>` : ''}
             <button data-edit-wish="${item.id}"><svg><use href="#i-edit"></use></svg>編集する</button>
             <button class="danger" data-delete-wish="${item.id}"><svg><use href="#i-trash"></use></svg>削除する</button>
           </div>
@@ -286,7 +288,7 @@ function renderWishlist() {
   const total = filtered.reduce((sum, item) => sum + Number(item.price), 0);
   document.querySelector('#wishlist-summary').innerHTML = `<span><strong>${filtered.length}</strong> アイテム</span><span>合計 <strong>${yen(total)}</strong></span>`;
   document.querySelector('#wishlist-grid').innerHTML = filtered.length
-    ? filtered.map(renderWishCard).join('')
+    ? filtered.map(item => renderWishCard(item, true)).join('')
     : emptyState('heart', '当てはまるものはありません', '別の優先度を見てみましょう');
   document.querySelectorAll('#wish-filters .filter-chip').forEach(button => button.classList.toggle('active', button.dataset.filter === wishFilter));
 }
@@ -309,7 +311,7 @@ function renderTasks() {
           </div>
           <div class="task-row-actions more-wrap">
             <button class="more-button" data-menu-for="${task.id}" aria-label="${escapeHTML(task.title)}のメニュー" title="メニュー"><svg><use href="#i-more"></use></svg></button>
-            <div class="card-menu" id="menu-${task.id}">
+            <div class="card-menu">
               <button data-edit-task="${task.id}"><svg><use href="#i-edit"></use></svg>編集する</button>
               <button class="danger" data-delete-task="${task.id}"><svg><use href="#i-trash"></use></svg>削除する</button>
             </div>
@@ -472,7 +474,7 @@ document.addEventListener('click', event => {
   const menuButton = event.target.closest('[data-menu-for]');
   if (menuButton) {
     event.stopPropagation();
-    const menu = document.querySelector(`#menu-${CSS.escape(menuButton.dataset.menuFor)}`);
+    const menu = menuButton.closest('.more-wrap')?.querySelector('.card-menu');
     document.querySelectorAll('.card-menu.open').forEach(item => { if (item !== menu) item.classList.remove('open'); });
     menu?.classList.toggle('open');
     return;
